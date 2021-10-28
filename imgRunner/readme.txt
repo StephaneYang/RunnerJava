@@ -1,0 +1,1 @@
+"imgRunner" file must be put in C://
