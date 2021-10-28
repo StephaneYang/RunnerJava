@@ -7,7 +7,7 @@ abstract class AnimatedThing {
     protected static ImageView sprite;
     protected static int attitude, index, maxIndex, sizeWindow, offset;
     public static int temps, timeFrames = 7;
-    protected static double windowX = 800, windowY = 399;
+    protected static double windowX = 800, windowY = 400;
     protected static double heroBaseX = (windowX/2)-50, heroBaseY = (windowY/2)-50;
 
     AnimatedThing (String imgSprite, double x, double y, int attitude, int offset){
