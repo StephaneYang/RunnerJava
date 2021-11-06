@@ -9,8 +9,8 @@ import javafx.scene.layout.Pane;
 
 public class GameScene extends Scene {
     static Pane pane;
-    static staticThing desertL = new staticThing("C:\\imgRunner\\desert.png", 0, 0, 0);
-    static staticThing desertR = new staticThing("C:\\imgRunner\\desert.png", 800, 0, 0);
+    static staticThing desertL = new staticThing("C:\\imgRunner\\BG12.png", 0, 0, 0);
+    static staticThing desertR = new staticThing("C:\\imgRunner\\BG12.png", 800, 0, 0);
     static staticThing hearts0 = new staticThing("C:\\imgRunner\\hearts0.png", 10, 0, 50);
     static staticThing hearts1 = new staticThing("C:\\imgRunner\\hearts1.png", 10, 0, 50);
     static staticThing hearts2 = new staticThing("C:\\imgRunner\\hearts2.png", 10, 0, 50);
@@ -18,7 +18,7 @@ public class GameScene extends Scene {
     static Camera cam;
     static Hero hero = new Hero(0, 86);
     static private int numberOfLives;
-    static double camOriginX, camOriginY, camX, camY;
+    static double camOriginX, camOriginY, camX, camY, i;
 
     public GameScene(Pane pane, double camOriginX, double camOriginY) {
         super(pane, hero.windowX, hero.windowY, true);
@@ -53,12 +53,12 @@ public class GameScene extends Scene {
             if (cam.getX()>=800+camOriginX) {
                 hero.x = 0; //repartir au début lorsqu'on atteint le bout de l'image
             }
-            hero.x += 10; //évolution de la position du héros
 
             //-------------affichage_paysage_DEBUT-------------
             if (cam.getX() < 800-hero.windowX) {
                 desertL.imageView.setViewport(new Rectangle2D(cam.getX(), cam.getY(), hero.windowX, hero.windowY));
                 desertL.imageView.setX(0);
+                desertR.imageView.setX(800);
             } else if ((cam.getX() >= 800-hero.windowX) && (cam.getX() < 800)) {
                 Rectangle2D viewportRect = new Rectangle2D(cam.getX(), cam.getY(), 800 - cam.getX(), hero.windowY);
                 desertL.imageView.setViewport(viewportRect);
@@ -70,9 +70,10 @@ public class GameScene extends Scene {
             } else if (cam.getX()>=800) {
                 desertR.imageView.setViewport(new Rectangle2D(cam.getX()-800, cam.getY(), 1600 - cam.getX(), hero.windowY));
                 desertR.imageView.setX(0);
-
+                if ((cam.getX()+hero.windowX-1600)>=0) { // Pour éviter des erreurs
                 Rectangle2D viewportRect2 = new Rectangle2D(0, cam.getY(), cam.getX()+hero.windowX-1600, hero.windowY);
                 desertL.imageView.setViewport(viewportRect2);
+                }
                 desertL.imageView.setX(1600 - cam.getX());
             }
             //-------------affichage_paysage_FIN-------------
@@ -94,6 +95,16 @@ public class GameScene extends Scene {
 
             pane.getChildren().add(hero.getImg());
             System.out.println("heroX ="+hero.x+", herobaseX ="+hero.heroBaseX+", camGetX ="+cam.getX());
+
+            hero.x += 20; //évolution de la position du héros
+            /*if (hero.x == 400) {
+                hero.x = 380;
+                i += 10;
+            }
+            if (i == 400) {
+                i = 0;
+                hero.x = 400;
+            }*/
         }
     }
 
