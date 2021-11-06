@@ -1,1 +1,1 @@
-"imgRunner" file must be put in C://
+"imgRunner" folder must be put in C://
