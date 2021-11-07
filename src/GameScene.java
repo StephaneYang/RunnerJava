@@ -9,8 +9,8 @@ import javafx.scene.layout.Pane;
 
 public class GameScene extends Scene {
     static Pane pane;
-    static staticThing desertL = new staticThing("C:\\imgRunner\\desert.png", 0, 0, 0);
-    static staticThing desertR = new staticThing("C:\\imgRunner\\desert.png", 800, 0, 0);
+    static staticThing desertL = new staticThing("C:\\imgRunner\\BG12.png", 0, 0, 0);
+    static staticThing desertR = new staticThing("C:\\imgRunner\\BG12.png", 800, 0, 0);
     static staticThing hearts0 = new staticThing("C:\\imgRunner\\hearts0.png", 10, 0, 50);
     static staticThing hearts1 = new staticThing("C:\\imgRunner\\hearts1.png", 10, 0, 50);
     static staticThing hearts2 = new staticThing("C:\\imgRunner\\hearts2.png", 10, 0, 50);
@@ -18,13 +18,13 @@ public class GameScene extends Scene {
     static Camera cam;
     static Hero hero = new Hero(0, 86);
     static private int numberOfLives;
-    static double camOriginX, camOriginY, camX, camY;
+    static double camOriginX, camOriginY, camX, camY, i;
 
     public GameScene(Pane pane, double camOriginX, double camOriginY) {
         super(pane, hero.windowX, hero.windowY, true);
         GameScene.camOriginX = camOriginX;
         GameScene.camOriginY = camOriginY;
-        numberOfLives = 3;
+        numberOfLives = 2;
         GameScene.pane = pane;
         GameScene.pane.getChildren().add(desertL.getImg());//mettre l'imageView dans pane (la fenêtre)
         GameScene.pane.getChildren().add(desertR.getImg());
@@ -48,28 +48,38 @@ public class GameScene extends Scene {
             //*imaginaire car hero.x et hero.y ne correspondent pas à la position qu'on voit sur la fenêtre (il reste dans la fenêtre et ne quitte pas l'écran) mais on imagine un hero qui évolue dans x et y
             GameScene.camX = hero.x + camOriginX;
             GameScene.camY = hero.y + camOriginY;
+            cam = new Camera(camX, camY); //transformation des coordonnées de la caméra (effet ressort)
 
-            hero.x += 10; //évolution de la position du héros
-            cam = new Camera(camX, camY);
+            if (cam.getX()>=800+camOriginX) {
+                hero.x = 0; //repartir au début lorsqu'on atteint le bout de l'image
+            }
+
+            //-------------affichage_paysage_DEBUT-------------
             if (cam.getX() < 800-hero.windowX) {
                 desertL.imageView.setViewport(new Rectangle2D(cam.getX(), cam.getY(), hero.windowX, hero.windowY));
+                desertL.imageView.setX(0);
+                desertR.imageView.setX(800);
             } else if ((cam.getX() >= 800-hero.windowX) && (cam.getX() < 800)) {
                 Rectangle2D viewportRect = new Rectangle2D(cam.getX(), cam.getY(), 800 - cam.getX(), hero.windowY);
                 desertL.imageView.setViewport(viewportRect);
+                desertL.imageView.setX(0);
+
                 Rectangle2D viewportRect1 = new Rectangle2D(0, cam.getY(), cam.getX()+hero.windowX-800, hero.windowY);
                 desertR.imageView.setViewport(viewportRect1);
                 desertR.imageView.setX(800 - cam.getX());
             } else if (cam.getX()>=800) {
-                desertR.imageView.setViewport(new Rectangle2D(cam.getX()-800, cam.getY(), hero.windowX, hero.windowY));
+                desertR.imageView.setViewport(new Rectangle2D(cam.getX()-800, cam.getY(), 1600 - cam.getX(), hero.windowY));
                 desertR.imageView.setX(0);
-                if (cam.getX()>=800+camOriginX) {
-                hero.x = 0;
+                if ((cam.getX()+hero.windowX-1600)>=0) { // Pour éviter des erreurs
+                Rectangle2D viewportRect2 = new Rectangle2D(0, cam.getY(), cam.getX()+hero.windowX-1600, hero.windowY);
+                desertL.imageView.setViewport(viewportRect2);
                 }
+                desertL.imageView.setX(1600 - cam.getX());
             }
-
-            hero.sprite.setX(hero.heroBaseX - (cam.getX()-camX)); //on soustrait la position du milieu par la transformation (différence entre le résultat de l'équation diff et l'entrée)
-                                                                  //si la caméra est en retard par rapport au héros, la tranformation est négative -> le sprite du héros va se décaler vers la droite sur la fenêtre
-                                                                  //lorsqu'il n'y aura plus de retard, le sprite revient au milieu (transformation nulle)
+            //-------------affichage_paysage_FIN-------------
+            hero.sprite.setX(hero.heroBaseX - (cam.getX()-camX)); //on soustrait la position du milieu par la transformation (transformation = différence entre le résultat de l'équation diff et l'entrée)
+                                                                  //si la caméra est en retard par rapport au héros, la tranformation est négative -> le sprite du héros part à droite sur la fenêtre
+                                                                  //lorsqu'il n'y aura plus de retard, le sprite revient au milieu (transformation = nulle)
             hero.sprite.setY(hero.heroBaseY - (cam.getY()-camY));
 
             pane.getChildren().remove(hearts0.getImg());
@@ -85,6 +95,16 @@ public class GameScene extends Scene {
 
             pane.getChildren().add(hero.getImg());
             System.out.println("heroX ="+hero.x+", herobaseX ="+hero.heroBaseX+", camGetX ="+cam.getX());
+
+            hero.x += 20; //évolution de la position du héros
+            /*if (hero.x == 400) {
+                hero.x = 380;
+                i += 10;
+            }
+            if (i == 400) {
+                i = 0;
+                hero.x = 400;
+            }*/
         }
     }
 
