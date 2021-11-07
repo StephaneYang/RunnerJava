@@ -20,7 +20,9 @@ public class Camera {
     }
 
     public static void update(long timer, Hero hero) {
-        vx = vx - x;
-        ax = 1*(hero.x-x) + 1.2*vx;
+        vx = GameScene.camX - x;
+
+        x = GameScene.camX;
+        y = GameScene.camY;
     }
 }

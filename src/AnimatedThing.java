@@ -5,6 +5,10 @@ import javafx.scene.image.ImageView;
 abstract class AnimatedThing {
     protected static double x, y;
     protected static ImageView sprite;
+    //attitude : état de notre héro = numéro de la ligne d'une animation (en commencant par 0)
+    //index : index d'une image = numéro d'une colonne
+    //maxIndex : nb d'image pour une animation complète
+    //offset : distance horizontale entre chaque frames dans notre fichier hero.jpg
     protected static int attitude, index, maxIndex, sizeWindow, offset;
     public static int temps, timeFrames = 7;
     protected static double windowX = 600, windowY = 300;

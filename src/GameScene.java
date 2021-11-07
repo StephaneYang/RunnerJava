@@ -25,6 +25,13 @@ public class GameScene extends Scene {
         GameScene.camOriginX = camOriginX;
         GameScene.camOriginY = camOriginY;
         numberOfLives = 2;
+
+        //camX et camY correspondent ensemble à la position du hero imaginaire* + les coordonnées (dans le paysage) du coin supérieur gauche de la caméra
+        //*imaginaire car hero.x et hero.y ne correspondent pas à la position qu'on voit sur la fenêtre (il reste dans la fenêtre et ne quitte pas l'écran) mais on imagine un hero qui évolue dans x et y
+        GameScene.camX = hero.x + camOriginX;
+        GameScene.camY = hero.y + camOriginY;
+        cam = new Camera(camX, camY); //transformation des coordonnées de la caméra (effet ressort)
+
         GameScene.pane = pane;
         GameScene.pane.getChildren().add(desertL.getImg());//mettre l'imageView dans pane (la fenêtre)
         GameScene.pane.getChildren().add(desertR.getImg());
@@ -44,11 +51,6 @@ public class GameScene extends Scene {
 
     public static void update(long time) {
         if (hero.temps % hero.timeFrames == 0) {
-            //camX et camY correspondent ensemble à la position du hero imaginaire* + les coordonnées (dans le paysage) du coin supérieur gauche de la caméra
-            //*imaginaire car hero.x et hero.y ne correspondent pas à la position qu'on voit sur la fenêtre (il reste dans la fenêtre et ne quitte pas l'écran) mais on imagine un hero qui évolue dans x et y
-            GameScene.camX = hero.x + camOriginX;
-            GameScene.camY = hero.y + camOriginY;
-            cam = new Camera(camX, camY); //transformation des coordonnées de la caméra (effet ressort)
 
             if (cam.getX()>=800+camOriginX) {
                 hero.x = 0; //repartir au début lorsqu'on atteint le bout de l'image
@@ -97,14 +99,17 @@ public class GameScene extends Scene {
             System.out.println("heroX ="+hero.x+", herobaseX ="+hero.heroBaseX+", camGetX ="+cam.getX());
 
             hero.x += 20; //évolution de la position du héros
-            /*if (hero.x == 400) {
+            if (hero.x == 400) {
                 hero.x = 380;
                 i += 10;
             }
             if (i == 400) {
                 i = 0;
                 hero.x = 400;
-            }*/
+            }
+            //Mise à jour des valeurs de camX et camY
+            GameScene.camX = hero.x + camOriginX;
+            GameScene.camY = hero.y + camOriginY;
         }
     }
 
