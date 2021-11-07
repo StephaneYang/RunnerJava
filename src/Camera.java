@@ -1,5 +1,5 @@
 public class Camera {
-    static private double x, y, vx, ax;
+    static private double x, oldx, y, vx, ax;
 
     Camera (double x, double y){
         this.x=x;
@@ -9,8 +9,14 @@ public class Camera {
     public double getX(){
         return this.x;
     }
+    public double getOldX(){
+        return this.oldx;
+    }
     public double getY(){
         return this.y;
+    }
+    public double getVX(){
+        return this.vx;
     }
 
     @Override
@@ -20,9 +26,9 @@ public class Camera {
     }
 
     public static void update(long timer, Hero hero) {
-        vx = GameScene.camX - x;
-
-        x = GameScene.camX;
+        x = hero.x;
+        vx = x - oldx;
+        oldx = hero.x;
         y = GameScene.camY;
     }
 }

@@ -19,6 +19,7 @@ public class GameScene extends Scene {
     static Hero hero = new Hero(0, 86);
     static private int numberOfLives;
     static double camOriginX, camOriginY, camX, camY, i;
+    static int attitude;
 
     public GameScene(Pane pane, double camOriginX, double camOriginY) {
         super(pane, hero.windowX, hero.windowY, true);
@@ -41,11 +42,30 @@ public class GameScene extends Scene {
 
     AnimationTimer timer = new AnimationTimer() {
         public void handle(long time) {
-            hero.update(time, 0);
+            if (cam.getVX() == 0) {
+                attitude = 1;
+            } else {
+                attitude = 0;
+            }
+            hero.update(time, attitude);
             Camera.update(time, hero);
             GameScene.update(time);
             hero.temps++;
 
+
+            hero.x += 3; //évolution de la position du héros
+            if (hero.x == 402) {
+                hero.x = 399;
+                i += 5;
+                hero.y = 0.003*i*(i-400);
+            }
+            if (i == 400) {
+                i = 0;
+                hero.x = 400;
+            }
+            //Mise à jour des valeurs de camX et camY
+            GameScene.camX = hero.x + camOriginX;
+            GameScene.camY = hero.y + camOriginY;
         }
     };
 
@@ -82,7 +102,7 @@ public class GameScene extends Scene {
             hero.sprite.setX(hero.heroBaseX - (cam.getX()-camX)); //on soustrait la position du milieu par la transformation (transformation = différence entre le résultat de l'équation diff et l'entrée)
                                                                   //si la caméra est en retard par rapport au héros, la tranformation est négative -> le sprite du héros part à droite sur la fenêtre
                                                                   //lorsqu'il n'y aura plus de retard, le sprite revient au milieu (transformation = nulle)
-            hero.sprite.setY(hero.heroBaseY - (cam.getY()-camY));
+            hero.sprite.setY(hero.heroBaseY - (cam.getY()-camY) + 0.3*hero.y);
 
             pane.getChildren().remove(hearts0.getImg());
             pane.getChildren().remove(hearts1.getImg());
@@ -96,20 +116,8 @@ public class GameScene extends Scene {
             if (numberOfLives == 3) pane.getChildren().add(hearts3.getImg());
 
             pane.getChildren().add(hero.getImg());
-            System.out.println("heroX ="+hero.x+", herobaseX ="+hero.heroBaseX+", camGetX ="+cam.getX());
+            System.out.println("heroX ="+hero.x+", X ="+cam.getX()+", OldX ="+cam.getOldX()+", heroIndex ="+hero.index);
 
-            hero.x += 20; //évolution de la position du héros
-            if (hero.x == 400) {
-                hero.x = 380;
-                i += 10;
-            }
-            if (i == 400) {
-                i = 0;
-                hero.x = 400;
-            }
-            //Mise à jour des valeurs de camX et camY
-            GameScene.camX = hero.x + camOriginX;
-            GameScene.camY = hero.y + camOriginY;
         }
     }
 
