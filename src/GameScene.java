@@ -16,7 +16,7 @@ public class GameScene extends Scene {
     static staticThing hearts2 = new staticThing("C:\\imgRunner\\hearts2.png", 10, 0, 50);
     static staticThing hearts3 = new staticThing("C:\\imgRunner\\hearts3.png", 10, 0, 50);
     static Camera cam;
-    static Hero hero = new Hero(0, 86);
+    static Hero hero = new Hero(0, 122);
     static private int numberOfLives;
     static double camOriginX, camOriginY, camX, camY, i;
     static int attitude;
@@ -54,15 +54,15 @@ public class GameScene extends Scene {
 
 
             hero.x += 3; //évolution de la position du héros
-            if (hero.x == 402) {
+            /*if (hero.x == 402) {
                 hero.x = 399;
                 i += 5;
-                hero.y = 0.003*i*(i-400);
+                //hero.y = 0.003*i*(i-400);
             }
             if (i == 400) {
                 i = 0;
                 hero.x = 400;
-            }
+            }*/
             //Mise à jour des valeurs de camX et camY
             GameScene.camX = hero.x + camOriginX;
             GameScene.camY = hero.y + camOriginY;
@@ -70,7 +70,6 @@ public class GameScene extends Scene {
     };
 
     public static void update(long time) {
-        if (hero.temps % hero.timeFrames == 0) {
 
             if (cam.getX()>=800+camOriginX) {
                 hero.x = 0; //repartir au début lorsqu'on atteint le bout de l'image
@@ -118,7 +117,6 @@ public class GameScene extends Scene {
             pane.getChildren().add(hero.getImg());
             System.out.println("heroX ="+hero.x+", X ="+cam.getX()+", OldX ="+cam.getOldX()+", heroIndex ="+hero.index);
 
-        }
     }
 
     public void SetLife(int life) {

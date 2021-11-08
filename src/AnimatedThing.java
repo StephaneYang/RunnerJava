@@ -45,7 +45,7 @@ abstract class AnimatedThing {
             if (index >= AnimatedThing.maxIndex + 1){
                 index = 0;
             }
-            Rectangle2D viewportRect = new Rectangle2D((index-index%1)*offset, attitude*159, 75, 100);
+            Rectangle2D viewportRect = new Rectangle2D((index-index%1)*offset, attitude*160, 120, 100);
             sprite.setViewport(viewportRect);
 
         }
