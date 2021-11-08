@@ -9,7 +9,7 @@ public class Camera {
         this.x=x;
         this.y=y;
         this.dt = 0.016;
-        this.sqrtwo = 5;//paramètre qui influence la rapidité de la caméra à se recentrer sur le hero (+élevé, +rapide)
+        this.sqrtwo = 5;//paramètre qui influence la rapidité de la caméra à se recentrer sur le héros (+élevé, +rapide)
         this.sqrtwo1 = 0.7;
     }
 
@@ -51,7 +51,7 @@ public class Camera {
         vy += dvy;
 
         dx = vx*dt ;
-        x += dx;//position calculée (décalée ou pas par rapport au héro)
+        x += dx;//position calculée (décalée ou pas par rapport au héros)
         dy = vy*dt ;
         y += dy;
 

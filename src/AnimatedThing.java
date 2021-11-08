@@ -4,10 +4,10 @@ import javafx.scene.image.ImageView;
 
 abstract class AnimatedThing {
     //x et y ne correspondent pas à la position qu'on voit sur la fenêtre
-    //(il reste dans la fenêtre et ne quitte pas l'écran) mais on imagine un hero qui évolue dans x et y
+    //(il reste dans la fenêtre et ne quitte pas l'écran) mais on imagine un héros qui évolue dans x et y
     protected static double x, y, oldx, oldy;
     protected static ImageView sprite;
-    //attitude : état de notre héro = numéro de la ligne d'une animation (en commencant par 0)
+    //attitude : état de notre héros = numéro de la ligne d'une animation (en commencant par 0)
     //index : index d'une image = numéro d'une colonne
     //maxIndex : nb d'image pour une animation complète
     //offset : distance horizontale entre chaque frames dans notre fichier hero.jpg
@@ -33,8 +33,8 @@ abstract class AnimatedThing {
     }
 
     public static void update(long time) {
-        //définition des états du hero
-        //Rq : "attitude" correspond également aux états du hero l'utilisation est différente
+        //définition des états du héros
+        //Rq : "attitude" correspond également aux états du héros l'utilisation est différente
         //attitude permet de choisir la ligne d'animation tandis que les états ci-dessous permet de choisir l'index (colonne)
         if ((x-oldx)>0) {
             attitude = 0;

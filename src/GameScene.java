@@ -28,7 +28,7 @@ public class GameScene extends Scene {
         numberOfLives = 2;
 
         //camX et camY correspondent ensemble à la position du hero imaginaire* + les coordonnées (dans le paysage) du coin supérieur gauche de la caméra
-        //*imaginaire car hero.x et hero.y ne correspondent pas à la position qu'on voit sur la fenêtre (il reste dans la fenêtre et ne quitte pas l'écran) mais on imagine un hero qui évolue dans x et y
+        //*imaginaire car hero.x et hero.y ne correspondent pas à la position qu'on voit sur la fenêtre (il reste dans la fenêtre et ne quitte pas l'écran) mais on imagine un héros qui évolue dans x et y
         GameScene.camX = hero.x + camOriginX;
         GameScene.camY = hero.y + camOriginY;
         cam = new Camera(camX, camY); //transformation des coordonnées de la caméra (effet ressort)
