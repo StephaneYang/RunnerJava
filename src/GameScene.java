@@ -115,7 +115,7 @@ public class GameScene extends Scene {
             if (numberOfLives == 3) pane.getChildren().add(hearts3.getImg());
 
             pane.getChildren().add(hero.getImg());
-            System.out.println("heroX ="+hero.x+", X ="+cam.getX()+", ax ="+cam.getAX()+", vs ="+cam.getVX());
+            System.out.println("heroX ="+hero.x+", X ="+cam.getX()+", ax ="+cam.getAX()+", vx ="+cam.getVX());
 
     }
 

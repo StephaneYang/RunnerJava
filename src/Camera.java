@@ -36,9 +36,9 @@ public class Camera {
         xHero = GameScene.camX;
         yHero = GameScene.camY;
 
-
-        x = xHero - (ax - 10*vx)*0.000001;
+        x = xHero - (ax - 0.1*vx)*0.00006;
         vx = (x - oldx)/0.016; //vitesse en pixels par secondes
+        if(vx<-10000) vx += 800/0.016; //réajustement de la vitesse lorsque le héros revient au debut de la map
         ax = (vx - oldvx)/0.016; //accélération en pixels par secondes par secondes
 
         //mémorisation en tant qu'anciennes valeurs
