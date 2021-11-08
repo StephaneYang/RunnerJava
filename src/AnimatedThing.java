@@ -5,20 +5,21 @@ import javafx.scene.image.ImageView;
 abstract class AnimatedThing {
     //x et y ne correspondent pas à la position qu'on voit sur la fenêtre
     //(il reste dans la fenêtre et ne quitte pas l'écran) mais on imagine un hero qui évolue dans x et y
-    protected static double x, y;
+    protected static double x, y, oldx, oldy;
     protected static ImageView sprite;
     //attitude : état de notre héro = numéro de la ligne d'une animation (en commencant par 0)
     //index : index d'une image = numéro d'une colonne
     //maxIndex : nb d'image pour une animation complète
     //offset : distance horizontale entre chaque frames dans notre fichier hero.jpg
-    protected static int attitude, maxIndex, sizeWindow, offset;
+    protected static int attitude, maxIndex, offset, isJumping, isFalling;
     public static int temps, timeFrames = 7;
     protected static double index, windowX = 600, windowY = 300;
-    protected static double heroBaseX = 0.5*windowX-50, heroBaseY = 0.8*windowY-50;
+    protected static double heroBaseX = 0.1*windowX, heroBaseY = 0.8*windowY-50;
 
-    AnimatedThing (String imgSprite, double x, double y, int attitude, int offset){
-        AnimatedThing.x = x;
-        AnimatedThing.y = y;
+    AnimatedThing (String imgSprite, int attitude, int offset){
+        AnimatedThing.x = 0;
+        AnimatedThing.y = 0;
+        AnimatedThing.oldy = 0;
         AnimatedThing.attitude = attitude;
         AnimatedThing.offset = offset;
         Image image = new Image(imgSprite);
@@ -31,8 +32,31 @@ abstract class AnimatedThing {
         return sprite;
     }
 
-    public static void update(long time, int attitude) {
-        AnimatedThing.attitude = attitude;
+    public static void update(long time) {
+        //définition des états du hero
+        //Rq : "attitude" correspond également aux états du hero l'utilisation est différente
+        //attitude permet de choisir la ligne d'animation tandis que les états ci-dessous permet de choisir l'index (colonne)
+        if ((x-oldx)>0) {
+            attitude = 0;
+        }
+
+        if ((y-oldy)<0){
+            isJumping = 1;
+            index = 0;
+            attitude = 1;
+        } else if ((y-oldy)>0){
+            isFalling = 1;
+            index = 1;
+            attitude = 1;
+        } else if ((y-oldy)==0) {
+            isJumping = 0;
+            isFalling = 0;
+        }
+        //Mise en mémoire en tant qu'ancienne valeur
+        oldx = x;
+        oldy = y;
+
+
         if (temps % timeFrames == 0) {
             if (attitude == 0 || attitude == 2) {
                 AnimatedThing.maxIndex = 5;
@@ -40,7 +64,6 @@ abstract class AnimatedThing {
             }
             if (attitude == 1 || attitude == 3) {
                 AnimatedThing.maxIndex = 1;
-                index += 0.2;
             }
             if (index >= AnimatedThing.maxIndex + 1){
                 index = 0;
@@ -49,6 +72,8 @@ abstract class AnimatedThing {
             sprite.setViewport(viewportRect);
 
         }
+
+
     }
 
 }

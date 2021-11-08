@@ -42,26 +42,20 @@ public class GameScene extends Scene {
 
     AnimationTimer timer = new AnimationTimer() {
         public void handle(long time) {
-            if (cam.getVX() == 0) {
-                attitude = 1;
-            } else {
-                attitude = 0;
-            }
-            hero.update(time, attitude);
+
+            hero.update(time);
             Camera.update(time, hero);
             GameScene.update(time);
             hero.temps++;
 
 
             hero.x += 3; //évolution de la position du héros
-            if (hero.x == 402) {
-                hero.x = 399;
+            if ((hero.x >= 402) && (hero.x < 642)) {
                 i += 5;
-                //hero.y = 0.003*i*(i-400);
+                hero.y = 0.003*i*(i-400);
             }
             if (i == 400) {
                 i = 0;
-                hero.x = 400;
             }
             //Mise à jour des valeurs de camX et camY
             GameScene.camX = hero.x + camOriginX;
@@ -71,14 +65,15 @@ public class GameScene extends Scene {
 
     public static void update(long time) {
 
-            if (cam.getX()>=800+camOriginX) {
+            if (GameScene.camX>=800+camOriginX) {
                 hero.x = 0; //repartir au début lorsqu'on atteint le bout de l'image
             }
 
             //-------------affichage_paysage_DEBUT-------------
             if (cam.getX() < 800-hero.windowX) {
-                desertL.imageView.setViewport(new Rectangle2D(cam.getX(), cam.getY(), hero.windowX, hero.windowY));
+                desertL.imageView.setViewport(new Rectangle2D(cam.getX()%800, cam.getY(), hero.windowX, hero.windowY));
                 desertL.imageView.setX(0);
+                //desertR.imageView.setViewport(new Rectangle2D(cam.getX()%800, cam.getY(), hero.windowX, hero.windowY));
                 desertR.imageView.setX(800);
             } else if ((cam.getX() >= 800-hero.windowX) && (cam.getX() < 800)) {
                 Rectangle2D viewportRect = new Rectangle2D(cam.getX(), cam.getY(), 800 - cam.getX(), hero.windowY);
@@ -89,7 +84,7 @@ public class GameScene extends Scene {
                 desertR.imageView.setViewport(viewportRect1);
                 desertR.imageView.setX(800 - cam.getX());
             } else if (cam.getX()>=800) {
-                desertR.imageView.setViewport(new Rectangle2D(cam.getX()-800, cam.getY(), 1600 - cam.getX(), hero.windowY));
+                desertR.imageView.setViewport(new Rectangle2D(cam.getX()%800, cam.getY(), 1600 - cam.getX(), hero.windowY));
                 desertR.imageView.setX(0);
                 if ((cam.getX()+hero.windowX-1600)>=0) { // Pour éviter des erreurs
                 Rectangle2D viewportRect2 = new Rectangle2D(0, cam.getY(), cam.getX()+hero.windowX-1600, hero.windowY);
