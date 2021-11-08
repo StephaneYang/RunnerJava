@@ -1,10 +1,6 @@
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Group;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
 public class GameScene extends Scene {
@@ -17,9 +13,30 @@ public class GameScene extends Scene {
     static staticThing hearts3 = new staticThing("C:\\imgRunner\\hearts3.png", 10, 0, 50);
     static Camera cam;
     static Hero hero = new Hero(0, 122);
-    static private int numberOfLives;
     static double camOriginX, camOriginY, camX, camY, i;
-    static int attitude;
+    static private int numberOfLives;
+    AnimationTimer timer = new AnimationTimer() {
+        public void handle(long time) {
+
+            hero.update();
+            Camera.update(time, hero);
+            GameScene.update(time);
+            hero.temps++;
+
+
+            hero.x += 3; //évolution de la position du héros
+            if ((hero.x >= 402) && (hero.x < 642)) {
+                i += 5;
+                hero.y = 0.003*i*(i-400);
+            }
+            if (i == 400) {
+                i = 0;
+            }
+            //Mise à jour des valeurs de camX et camY
+            GameScene.camX = hero.x + camOriginX;
+            GameScene.camY = hero.y + camOriginY;
+        }
+    };
 
     public GameScene(Pane pane, double camOriginX, double camOriginY) {
         super(pane, hero.windowX, hero.windowY, true);
@@ -39,29 +56,6 @@ public class GameScene extends Scene {
 
         timer.start();
     }
-
-    AnimationTimer timer = new AnimationTimer() {
-        public void handle(long time) {
-
-            hero.update(time);
-            Camera.update(time, hero);
-            GameScene.update(time);
-            hero.temps++;
-
-
-            hero.x += 3; //évolution de la position du héros
-            if ((hero.x >= 402) && (hero.x < 642)) {
-                i += 5;
-                hero.y = 0.003*i*(i-400);
-            }
-            if (i == 400) {
-                i = 0;
-            }
-            //Mise à jour des valeurs de camX et camY
-            GameScene.camX = hero.x + camOriginX;
-            GameScene.camY = hero.y + camOriginY;
-        }
-    };
 
     public static void update(long time) {
 
