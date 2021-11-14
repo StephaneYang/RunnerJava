@@ -3,6 +3,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 abstract class AnimatedThing {
+    protected static double heroBaseX = 0.05*600, heroBaseY = 0.8*300-50;
     public int temps, timeFrames = 7;
     public double dt = 0.016;
     //x et y ne correspondent pas à la position qu'on voit sur la fenêtre
@@ -16,7 +17,6 @@ abstract class AnimatedThing {
     //offset : distance horizontale entre chaque frames dans notre fichier hero.jpg
     protected int attitude, maxIndex, offset, isJumping, isFalling;
     protected double index;
-    protected static double heroBaseX = 0.05*600, heroBaseY = 0.8*300-50;
 
     AnimatedThing (String imgSprite, int attitude, int offset){
         this.x = 0;

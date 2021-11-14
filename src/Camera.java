@@ -1,13 +1,5 @@
 public class Camera {
-    static private double x;
-    static private double y;
-    static private double vx;
-    static private double vy;
-    static private double ax;
-    static private double ay;
-    static private double dt;
-    static private double sqrtwo;
-    static private double sqrtwo1;
+    static private double x, y, vx, vy, ax, ay, dt, sqrtwo, sqrtwo1;
     static private int viewOffset;
 
     Camera (double x, double y){
@@ -21,25 +13,6 @@ public class Camera {
         dt = 0.016;
         sqrtwo = 5;//paramètre qui influence la rapidité de la caméra à se recentrer sur le héros (+élevé, +rapide)
         sqrtwo1 = 1.5;
-    }
-
-    public double getX(){
-        return x;
-    }
-    public double getY(){
-        return Math.min(y, 400 - GameScene.windowY);//limitation pour ne pas afficher ce qui est en dehors du décor
-    }
-    public double getVX(){
-        return vx;
-    }
-    public double getAX(){
-        return ax;
-    }
-
-    @Override
-    public String toString (){
-        System.out.println(x+", "+ y);
-        return null;
     }
 
     public static void update(long time, Hero hero) {
@@ -68,5 +41,27 @@ public class Camera {
         double dy = vy * dt;
         y += dy;
 
+    }
+
+    public double getX(){
+        return x;
+    }
+
+    public double getY(){
+        return Math.min(y, 400 - GameScene.windowY);//limitation pour ne pas afficher ce qui est en dehors du décor
+    }
+
+    public double getVX(){
+        return vx;
+    }
+
+    public double getAX(){
+        return ax;
+    }
+
+    @Override
+    public String toString (){
+        System.out.println(x+", "+ y);
+        return null;
     }
 }

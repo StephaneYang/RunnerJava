@@ -4,6 +4,8 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 
 public class GameScene extends Scene {
+    protected static double windowX = 600, windowY = 300;
+    static double camOriginX, camOriginY, camX, camY;
     Pane pane;
     staticThing desertL = new staticThing("C:\\imgRunner\\BG12.png", 0, 0, 0);
     staticThing desertR = new staticThing("C:\\imgRunner\\BG12.png", 800, 0, 0);
@@ -13,8 +15,6 @@ public class GameScene extends Scene {
     staticThing hearts3 = new staticThing("C:\\imgRunner\\hearts3.png", 10, 0, 50);
     Camera cam;
     Hero hero = new Hero(0, 122);
-    static double camOriginX, camOriginY, camX, camY;
-    protected static double windowX = 600, windowY = 300;
     private int numberOfLives;
     AnimationTimer timer = new AnimationTimer() {
         public void handle(long time) {
@@ -33,6 +33,7 @@ public class GameScene extends Scene {
             //Mise à jour des valeurs de camX et camY
             camX = hero.x + camOriginX;
             camY = hero.y + camOriginY;
+
         }
     };
 
@@ -51,6 +52,7 @@ public class GameScene extends Scene {
         this.pane = pane;
         this.pane.getChildren().add(desertL.getImg());//mettre l'imageView dans pane (la fenêtre)
         this.pane.getChildren().add(desertR.getImg());
+        this.pane.getChildren().add(hero.getImg());
 
         timer.start();
     }
@@ -85,23 +87,25 @@ public class GameScene extends Scene {
                 desertL.imageView.setX(1600 - cam.getX());
             }
             //-------------affichage_paysage_FIN-------------
+
+            //-------------position du heros sur l'écran_DEBUT-------------
             hero.sprite.setX(AnimatedThing.heroBaseX - (cam.getX()-camX)); //on soustrait la position du milieu par la transformation (transformation = différence entre le résultat de l'équation diff et l'entrée)
                                                                   //si la caméra est en retard par rapport au héros, la tranformation est négative -> le sprite du héros part à droite sur la fenêtre
                                                                   //lorsqu'il n'y aura plus de retard, le sprite revient au milieu (transformation = nulle)
             hero.sprite.setY(AnimatedThing.heroBaseY - (cam.getY()-camY));
+            //-------------position du heros sur l'écran_FIN-------------
 
+            //-------------mise à jour de l'affichage des coeurs_DEBUT-------------
             pane.getChildren().remove(hearts0.getImg());
             pane.getChildren().remove(hearts1.getImg());
             pane.getChildren().remove(hearts2.getImg());
             pane.getChildren().remove(hearts3.getImg());
-            pane.getChildren().remove(hero.getImg());
-
             if (numberOfLives == 0) pane.getChildren().add(hearts0.getImg());
             if (numberOfLives == 1) pane.getChildren().add(hearts1.getImg());
             if (numberOfLives == 2) pane.getChildren().add(hearts2.getImg());
-            if (numberOfLives == 3) pane.getChildren().add(hearts3.getImg());
+            if (numberOfLives >= 3) pane.getChildren().add(hearts3.getImg());
+            //-------------mise à jour de l'affichage des coeurs_FIN-------------
 
-            pane.getChildren().add(hero.getImg());
             System.out.println("heroX ="+hero.x+", X ="+cam.getX()+", ax ="+cam.getAX()+", vx ="+cam.getVX());
 
     }
