@@ -1,5 +1,13 @@
 public class Camera {
-    static private double x, y, vx, vy, ax, ay, xHero, yHero, dx, dy, dvx, dvy, dt, sqrtwo, sqrtwo1;
+    static private double x;
+    static private double y;
+    static private double vx;
+    static private double vy;
+    static private double ax;
+    static private double ay;
+    static private double dt;
+    static private double sqrtwo;
+    static private double sqrtwo1;
     static private int viewOffset;
 
     Camera (double x, double y){
@@ -19,8 +27,7 @@ public class Camera {
         return x;
     }
     public double getY(){
-        if(y>400-GameScene.windowY) return 400-GameScene.windowY;//limitation pour ne pas afficher ce qui est en dehors du décor
-        else return y;
+        return Math.min(y, 400 - GameScene.windowY);//limitation pour ne pas afficher ce qui est en dehors du décor
     }
     public double getVX(){
         return vx;
@@ -36,29 +43,29 @@ public class Camera {
     }
 
     public static void update(long time, Hero hero) {
-        xHero = GameScene.camX;
-        yHero = GameScene.camY + viewOffset;
-        if ((xHero-x)<-700) x -= 800;//réajustement de la position lorsque le héros revient au debut de la map
+        double xHero = GameScene.camX;
+        double yHero = GameScene.camY + viewOffset;
+        if ((xHero -x)<-700) x -= 800;//réajustement de la position lorsque le héros revient au debut de la map
                                      //xHero est réduit de 800, donc il faut que x soit réduit de 800 aussi afin de
                                      //garder l'écart réelle et éviter de fausser les calculs
-        ax = sqrtwo*sqrtwo*(xHero-x) - 2*1*sqrtwo*vx; //équation ressort-masse , amortissement = 1 (pas de dépassemnt)
-        ay = sqrtwo*sqrtwo*(yHero-y) - 2*0.7*sqrtwo*vy; //amortissement = 0.7 (meilleur temps de réponse)
+        ax = sqrtwo*sqrtwo*(xHero -x) - 2*1*sqrtwo*vx; //équation ressort-masse , amortissement = 1 (pas de dépassemnt)
+        ay = sqrtwo*sqrtwo*(yHero -y) - 2*0.7*sqrtwo*vy; //amortissement = 0.7 (meilleur temps de réponse)
         if (hero.isJumping == 1) {//monte moins vite que descendre
-            ay = sqrtwo1*sqrtwo1*(yHero-y) - 2*0.7*sqrtwo1*vy;
+            ay = sqrtwo1*sqrtwo1*(yHero -y) - 2*0.7*sqrtwo1*vy;
             viewOffset = 0;
         } else if (hero.isFalling == 1) {
             viewOffset = 60; //décalage vers en bas lorsque le héros tombe afin de voir en avance ce qu'il y a en bas
         } else {
             viewOffset = 0;
         }
-        dvx = ax*dt;
+        double dvx = ax * dt;
         vx += dvx;//vitesse en pixels par secondes
-        dvy = ay*dt;
+        double dvy = ay * dt;
         vy += dvy;
 
-        dx = vx*dt ;
+        double dx = vx * dt;
         x += dx;//position calculée (décalée ou pas par rapport au héros)
-        dy = vy*dt ;
+        double dy = vy * dt;
         y += dy;
 
     }
