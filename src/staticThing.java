@@ -5,8 +5,8 @@ import javafx.scene.layout.HBox;
 
 public class staticThing {
 
-    private double x;
-    private double y;
+    private final double x;
+    private final double y;
     ImageView imageView;
 
     staticThing (String background, double x, double y, double fit) {

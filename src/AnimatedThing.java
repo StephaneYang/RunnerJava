@@ -8,7 +8,7 @@ abstract class AnimatedThing {
     public double dt = 0.016;
     //x et y ne correspondent pas à la position qu'on voit sur la fenêtre
     //(il reste dans la fenêtre et ne quitte pas l'écran) mais on imagine un héros qui évolue dans x et y
-    protected double x, y, oldx, oldy;
+    protected double x, y, oldx, oldy, incrementation=1;
     protected double gravity_a = 400, gravity_dv, gravity_v, gravity_dy;
     protected ImageView sprite;
     //attitude : état de notre héros = numéro de la ligne d'une animation (en commencant par 0)
@@ -103,8 +103,9 @@ abstract class AnimatedThing {
 
     public void jump (){
         jumpLvl ++; // variable du niveau du saut
-        if ((jumpLvl<=2) && (isFalling == 0)) {
+        if ((jumpLvl<=1) && (isFalling == 0)) {
             gravity_a -= 400*45;//application d'une force de poussée opposée à la gravité
         }
+        //incrementation = 1 - incrementation;
     }
 }

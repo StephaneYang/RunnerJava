@@ -24,7 +24,7 @@ public class GameScene extends Scene {
             update(time);
             hero.temps++;
 
-            hero.x += 3; //évolution de la position du héros
+            hero.x += hero.incrementation*3; //évolution de la position du héros
 
             if (hero.y == 0) hero.jumpLvl = 0;// remise à 0 de la limite de saut
 
@@ -54,8 +54,8 @@ public class GameScene extends Scene {
         this.pane.setOnMouseClicked(event -> {
             hero.jump();
             if (hero.jumpLvl == 1) System.out.println("Jump");
-            else if (hero.jumpLvl>2) System.out.println("You can not do more than double jump");
-            else if ((hero.jumpLvl==2)&& (hero.isFalling == 0)) System.out.println("Double Jump");
+            //else if (hero.jumpLvl>2) System.out.println("You can not do more than double jump");
+            //else if ((hero.jumpLvl==2)&& (hero.isFalling == 0)) System.out.println("Double Jump");
         });
 
         timer.start();
