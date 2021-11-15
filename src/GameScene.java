@@ -52,10 +52,10 @@ public class GameScene extends Scene {
         this.pane.getChildren().add(hero.getImg());
 
         this.pane.setOnMouseClicked(event -> {
-            hero.jump(event.getClickCount());
+            hero.jump();
             if (hero.jumpLvl == 1) System.out.println("Jump");
             else if (hero.jumpLvl>2) System.out.println("You can not do more than double jump");
-            else if (hero.jumpLvl==2) System.out.println("Double Jump");
+            else if ((hero.jumpLvl==2)&& (hero.isFalling == 0)) System.out.println("Double Jump");
         });
 
         timer.start();
@@ -110,7 +110,7 @@ public class GameScene extends Scene {
             if (numberOfLives >= 3) pane.getChildren().add(hearts3.getImg());
             //-------------mise à jour de l'affichage des coeurs_FIN-------------
 
-            System.out.println("heroY ="+hero.y+", JumpLvl ="+hero.jumpLvl+", ax ="+cam.getAX()+", vx ="+cam.getVX());
+            //System.out.println("heroY ="+hero.y+", JumpLvl ="+hero.jumpLvl+", ax ="+cam.getAX()+", vx ="+cam.getVX());
 
     }
 

@@ -77,7 +77,6 @@ abstract class AnimatedThing {
             if (y<-jumpLvl*105) y = -jumpLvl*105; //2e limitation du saut atteinte
             gravity_a = 400; //application de la gravité seule
         }
-
         //Gravité----FIN----
 
         //-------Animation du héros DEBUT-------
@@ -102,15 +101,10 @@ abstract class AnimatedThing {
         return sprite;
     }
 
-    public void jump (int getClickCount){
+    public void jump (){
         jumpLvl ++; // variable du niveau du saut
-        if ((jumpLvl<=1) && (isFalling == 0)) {
-            /*if (getClickCount == 2) {
-                jumpLvl++;
-                gravity_a -= 400*90;
-            }*/
-            if (getClickCount == 1) gravity_a -= 400*45;//application d'une force de poussée opposée à la gravité
+        if ((jumpLvl<=2) && (isFalling == 0)) {
+            gravity_a -= 400*45;//application d'une force de poussée opposée à la gravité
         }
     }
-
 }
