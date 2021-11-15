@@ -12,7 +12,7 @@ public class Camera {
         Camera.y =y;
         dt = 0.016;
         sqrtwo = 5;//paramètre qui influence la rapidité de la caméra à se recentrer sur le héros (+élevé, +rapide)
-        sqrtwo1 = 1.5;
+        sqrtwo1 = 0.1;
     }
 
     public static void update(long time, Hero hero) {
@@ -24,10 +24,10 @@ public class Camera {
         ax = sqrtwo*sqrtwo*(xHero -x) - 2*1*sqrtwo*vx; //équation ressort-masse , amortissement = 1 (pas de dépassemnt)
         ay = sqrtwo*sqrtwo*(yHero -y) - 2*0.7*sqrtwo*vy; //amortissement = 0.7 (meilleur temps de réponse)
         if (hero.isJumping == 1) {//monte moins vite que descendre
-            ay = sqrtwo1*sqrtwo1*(yHero -y) - 2*0.7*sqrtwo1*vy;
+            ay = sqrtwo1*sqrtwo1*(yHero -y) - 2*1*sqrtwo1*vy;
             viewOffset = 0;
         } else if (hero.isFalling == 1) {
-            viewOffset = 60; //décalage vers en bas lorsque le héros tombe afin de voir en avance ce qu'il y a en bas
+            viewOffset = 80; //décalage vers en bas lorsque le héros tombe afin de voir en avance ce qu'il y a en bas
         } else {
             viewOffset = 0;
         }
@@ -48,7 +48,11 @@ public class Camera {
     }
 
     public double getY(){
-        return Math.min(y, 400 - GameScene.windowY);//limitation pour ne pas afficher ce qui est en dehors du décor
+        if(y<0){
+            return 0;
+        } else {
+            return Math.min(y, 400 - GameScene.windowY);//limitation pour ne pas afficher ce qui est en dehors du décors
+        }
     }
 
     public double getVX(){

@@ -24,16 +24,13 @@ public class GameScene extends Scene {
             update(time);
             hero.temps++;
 
-
             hero.x += 3; //évolution de la position du héros
 
-            hero.P = 0;
-            if (hero.x == 402) hero.P = 50;
+            if (hero.y == 0) hero.jumpLvl = 0;// remise à 0 de la limite de saut
 
             //Mise à jour des valeurs de camX et camY
             camX = hero.x + camOriginX;
             camY = hero.y + camOriginY;
-
         }
     };
 
@@ -53,6 +50,13 @@ public class GameScene extends Scene {
         this.pane.getChildren().add(desertL.getImg());//mettre l'imageView dans pane (la fenêtre)
         this.pane.getChildren().add(desertR.getImg());
         this.pane.getChildren().add(hero.getImg());
+
+        this.pane.setOnMouseClicked(event -> {
+            hero.jump(event.getClickCount());
+            if (hero.jumpLvl == 1) System.out.println("Jump");
+            else if (hero.jumpLvl>2) System.out.println("You can not do more than double jump");
+            else if (hero.jumpLvl==2) System.out.println("Double Jump");
+        });
 
         timer.start();
     }
@@ -106,7 +110,7 @@ public class GameScene extends Scene {
             if (numberOfLives >= 3) pane.getChildren().add(hearts3.getImg());
             //-------------mise à jour de l'affichage des coeurs_FIN-------------
 
-            System.out.println("heroX ="+hero.x+", X ="+cam.getX()+", ax ="+cam.getAX()+", vx ="+cam.getVX());
+            System.out.println("heroY ="+hero.y+", JumpLvl ="+hero.jumpLvl+", ax ="+cam.getAX()+", vx ="+cam.getVX());
 
     }
 
