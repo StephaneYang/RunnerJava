@@ -1,6 +1,9 @@
 import javafx.animation.AnimationTimer;
+import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 
 public class GameScene extends Scene {
@@ -54,8 +57,18 @@ public class GameScene extends Scene {
         this.pane.setOnMouseClicked(event -> {
             hero.jump();
             if (hero.jumpLvl == 1) System.out.println("Jump");
-            //else if (hero.jumpLvl>2) System.out.println("You can not do more than double jump");
-            //else if ((hero.jumpLvl==2)&& (hero.isFalling == 0)) System.out.println("Double Jump");
+        });
+
+        this.pane.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                switch (event.getCode()){
+                    case UP :   hero.jump(); System.out.println("UP"); break;
+                    case DOWN:  hero.y++; System.out.println("DOWN");    break;
+                    case LEFT:  hero.x--; System.out.println("LEFT");    break;
+                    case RIGHT: hero.x++; System.out.println("RIGHT");    break;
+                }
+            }
         });
 
         timer.start();

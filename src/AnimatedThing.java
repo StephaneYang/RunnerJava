@@ -75,7 +75,7 @@ abstract class AnimatedThing {
         if (y<-2*105) y = -2*105; //1re limitation du saut atteinte
         if (jumpLvl>0 && jumpLvl<=2) {
             if (y<-jumpLvl*105) y = -jumpLvl*105; //2e limitation du saut atteinte
-            gravity_a = 400; //application de la gravité seule
+            gravity_a = 500; //application de la gravité seule
         }
         //Gravité----FIN----
 
@@ -104,7 +104,7 @@ abstract class AnimatedThing {
     public void jump (){
         jumpLvl ++; // variable du niveau du saut
         if ((jumpLvl<=1) && (isFalling == 0)) {
-            gravity_a -= 400*45;//application d'une force de poussée opposée à la gravité
+            gravity_a -= 500*40;//application d'une force de poussée opposée à la gravité
         }
         //incrementation = 1 - incrementation;
     }
