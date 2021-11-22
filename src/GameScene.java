@@ -29,9 +29,13 @@ public class GameScene extends Scene {
             camY = hero.y + camOriginY;
 
             hero.update();
+            for(int i=0;i<alFoe.size();i++)
+            {
+                alFoe.get(i).update();
+            }
             Camera.update(time, hero);
             update(time);
-            hero.temps++;
+            AnimatedThing.temps++;
 
             if (right == 1) {
                 hero.incrementation = 5;//hero run faster
@@ -58,7 +62,8 @@ public class GameScene extends Scene {
                 hero.x = 0; //repartir au début lorsqu'on atteint le bout de l'image
             }
 
-            System.out.println("camGetX = "+cam.getX());
+            if (hero.detectCollision(alFoe.get(0).getHitBox())==1) System.out.println("Collision !");
+            else System.out.println(".");
         }
     };
 
@@ -79,7 +84,7 @@ public class GameScene extends Scene {
         this.pane.getChildren().add(desertR.getImg());
         this.pane.getChildren().add(hero.getImg());
 
-        alFoe.add(new Foe(300,150));//ajouter un ennemi
+        alFoe.add(new Foe(150,190));//ajouter un ennemi
         this.pane.getChildren().add(alFoe.get(0).getImg());
         alFoe.get(0).sprite.setX(alFoe.get(0).BaseX);
         alFoe.get(0).sprite.setY(alFoe.get(0).BaseY);

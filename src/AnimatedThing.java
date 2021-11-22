@@ -4,7 +4,8 @@ import javafx.scene.image.ImageView;
 
 abstract class AnimatedThing {
     protected double BaseX, BaseY;
-    public int temps, timeFrames = 7;
+    public static int temps;
+    public int timeFrames = 7;
     public double dt = 0.016;
     //x et y ne correspondent pas à la position qu'on voit sur la fenêtre
     //(il reste dans la fenêtre et ne quitte pas l'écran) mais on imagine un héros qui évolue dans x et y
@@ -17,6 +18,8 @@ abstract class AnimatedThing {
     //offset : distance horizontale entre chaque frames dans notre fichier hero.jpg
     protected int attitude, maxIndex, offset=122, isJumping, isFalling, jumpLvl = 0;
     protected double index;
+    protected int decalageX = 30, decalageY = 10;//variable servant à rétrécir le rectangle hitbox qui capture notre sprite
+                                       //car le rectangle de base (qui sert pour l'animation) est trop grand pour la hitbox
 
     AnimatedThing (String imgSprite, double BaseX, double BaseY){
         this.x = 0;
@@ -78,7 +81,7 @@ abstract class AnimatedThing {
         if (y<-2*105) y = -2*105; //1re limitation du saut atteinte
         if (jumpLvl>0) {
             if (y<-105) y = -105; //2e limitation du saut atteinte
-            gravity_a = 500; //application de la gravité seule
+            gravity_a = 550; //application de la gravité seule
         }
         //Gravité----FIN----
 
@@ -100,16 +103,34 @@ abstract class AnimatedThing {
         //-------Animation du héros FIN-------
     }
 
-    public ImageView getImg () {
+    public ImageView getImg (){
         return sprite;
     }
 
     public void jump (){
         jumpLvl ++; // variable du niveau du saut
         if ((jumpLvl<=1) && (isFalling == 0)) {
-            gravity_a -= 500*13;//application d'une force de poussée opposée à la gravité
+            gravity_a -= 500*14;//application d'une force de poussée opposée à la gravité
         } else {
-            gravity_a = 500;//gravité seule
+            gravity_a = 550;//gravité seule
+        }
+    }
+
+    public Rectangle2D getHitBox(){
+        return new Rectangle2D(sprite.getX()+decalageX, sprite.getY()+5, 120-2*decalageX,100-2*decalageY);
+    }
+
+    public int detectCollision(Rectangle2D rect){
+        if (rect.getMinX()>sprite.getX()+120-decalageX){
+            return 0;
+        } else if (rect.getMinY()>sprite.getY()+100-decalageY){
+            return 0;
+        } else if (rect.getMaxX()<sprite.getX()+decalageX){
+            return 0;
+        } else if (rect.getMaxY()<sprite.getY()+decalageX){
+            return 0;
+        } else {
+            return 1;
         }
     }
 }

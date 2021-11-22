@@ -30,11 +30,11 @@ public class Main extends Application {
 
             theScene.setOnKeyPressed(event -> {
                 switch (event.getCode()){
-                    case UP : GameScene.up = 1;System.out.println("JUMP");break;
-                    case DOWN: GameScene.down = 1;System.out.println("STOP");break;
-                    case LEFT:  GameScene.left = 1;System.out.println("SLOW");break;
-                    case RIGHT: GameScene.right = 1;System.out.println("FAST");break;
-                    case SPACE: GameScene.shoot = 1;System.out.println("SHOOT");break;
+                    case UP : GameScene.up = 1;break;
+                    case DOWN: GameScene.down = 1;break;
+                    case LEFT:  GameScene.left = 1;break;
+                    case RIGHT: GameScene.right = 1;break;
+                    case SPACE: GameScene.shoot = 1;break;
                 }
             });
 
