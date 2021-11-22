@@ -18,7 +18,7 @@ public class Camera {
     public static void update(long time, Hero hero) {
         double xHero = GameScene.camX;
         double yHero = GameScene.camY + viewOffset;
-        if ((xHero -x)<-700) x -= 800;//réajustement de la position lorsque le héros revient au debut de la map
+        if ((xHero -x)<-100) x -= 800;//réajustement de la position lorsque le héros revient au debut de la map (écart important)
                                      //xHero est réduit de 800, donc il faut que x soit réduit de 800 aussi afin de
                                      //garder l'écart réelle et éviter de fausser les calculs
         ax = sqrtwo*sqrtwo*(xHero -x) - 2*1*sqrtwo*vx; //équation ressort-masse , amortissement = 1 (pas de dépassemnt)
