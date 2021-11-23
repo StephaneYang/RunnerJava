@@ -2,7 +2,7 @@ public class Hero extends AnimatedThing {
 
     double invincibility;
     Hero(double BaseX, double BaseY) {
-       super("C:\\imgRunner\\heros.png", BaseX, BaseY, 30, 10);
+       super("C:\\imgRunner\\heros.png", BaseX, BaseY, 35, 10);
     }
 
     public int isInvincible (){

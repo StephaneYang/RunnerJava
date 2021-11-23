@@ -29,6 +29,8 @@ abstract class AnimatedThing {
         this.oldy = 0;
         this.BaseX = BaseX;
         this.BaseY = BaseY;
+        this.decalageX = decalageX;
+        this.decalageY = decalageY;
         Image image = new Image(imgSprite);
         sprite = new ImageView(image);
         Rectangle2D viewportRect = new Rectangle2D(index*offset, attitude*159, 120, 100);
@@ -129,7 +131,7 @@ abstract class AnimatedThing {
     }
 
     public Rectangle2D getHitBox(){
-        return new Rectangle2D(sprite.getX()+decalageX, sprite.getY()+5, 120-2*decalageX,100-2*decalageY);
+        return new Rectangle2D(sprite.getX()+decalageX, sprite.getY()+decalageY, 120-2*decalageX,100-2*decalageY);
     }
 
     public int detectCollision(Rectangle2D rect){

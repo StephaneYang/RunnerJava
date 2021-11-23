@@ -47,7 +47,7 @@ public class GameScene extends Scene {
 
             for (Foe foe : alFoe) {
                 foe.update();
-                foe.x = cam.getX();//déplacement de l'ennemi en fonction de celui de la caméra (déplacement similaire au paysage)
+                foe.x -= hero.incrementation;//déplacement de l'ennemi en fonction de celui de la caméra (déplacement similaire au paysage)
             }
             if (hero.invincibility > 0) hero.invincibility -= 100000000;//décrémentation du temps d'invincibilité
             //System.out.println("invincibility = "+hero.invincibility+"   isinvincible"+hero.isInvincible());
@@ -63,20 +63,6 @@ public class GameScene extends Scene {
 
             if (camX>=800+camOriginX) {
                 hero.x = 0; //repartir au début lorsqu'on atteint le bout de l'image
-                for (Foe foe : alFoe) {
-                    foe.x -= 800;//réajustement des ennemis
-                }
-            }
-
-            //détection de collision
-            for (Foe foe : alFoe) {
-                if (hero.isInvincible() == 0) {//if the hero is not invincible, check the hitbox
-                    if (hero.detectCollision(foe.getHitBox()) == 1) {
-                        System.out.println("Collision !");
-                        hero.invincibility = 25000000000.0;
-                        numberOfLives--;
-                    } else System.out.println(".");
-                }
             }
         }
     };
@@ -158,10 +144,22 @@ public class GameScene extends Scene {
 
         //-------------position des ennemis sur l'écran_DEBUT-------------
         for (Foe foe : alFoe) {
-            foe.sprite.setX(foe.BaseX - foe.x);
+            foe.sprite.setX(foe.BaseX + foe.x);
             foe.sprite.setY(290 - cam.getY());
         }
         //-------------position des ennemis sur l'écran_FIN-------------
+
+        //-------------détection de collision_DEBUT-------------
+        for (Foe foe : alFoe) {
+            if (hero.isInvincible() == 0) {//if the hero is not invincible, check the hitbox
+                if (hero.detectCollision(foe.getHitBox()) == 1) {
+                    System.out.println("Collision !");
+                    hero.invincibility = 25000000000.0;
+                    numberOfLives--;
+                } else System.out.println(".");
+            }
+        }
+        //-------------détection de collision_FIN-------------
 
         //-------------mise à jour de l'affichage des coeurs_DEBUT-------------
         pane.getChildren().remove(hearts0.getImg());
