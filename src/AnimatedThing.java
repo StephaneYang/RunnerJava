@@ -6,6 +6,7 @@ abstract class AnimatedThing {
     protected double BaseX, BaseY;
     public static int temps;
     public int timeFrames = 7;
+    public int toggle, invincibleAnimation;//toggle for invincibility animation
     public double dt = 0.016;
     //x et y ne correspondent pas à la position qu'on voit sur la fenêtre
     //(il reste dans la fenêtre et ne quitte pas l'écran) mais on imagine un héros qui évolue dans x et y
@@ -18,10 +19,10 @@ abstract class AnimatedThing {
     //offset : distance horizontale entre chaque frames dans notre fichier hero.jpg
     protected int attitude, maxIndex, offset=122, isJumping, isFalling, jumpLvl = 0;
     protected double index;
-    protected int decalageX = 30, decalageY = 10;//variable servant à rétrécir le rectangle hitbox qui capture notre sprite
+    protected int decalageX, decalageY;//variable servant à rétrécir le rectangle hitbox qui capture notre sprite
                                        //car le rectangle de base (qui sert pour l'animation) est trop grand pour la hitbox
 
-    AnimatedThing (String imgSprite, double BaseX, double BaseY){
+    AnimatedThing (String imgSprite, double BaseX, double BaseY, int decalageX, int decalageY){
         this.x = 0;
         this.y = 0;
         this.oldx = 0;
@@ -87,6 +88,12 @@ abstract class AnimatedThing {
 
         //-------Animation du héros DEBUT-------
         if (temps % timeFrames == 0) {
+            if (invincibleAnimation == 1){
+                toggle = 1-toggle;//toggle vaudra alternativement 0 ou 1
+            } else{
+                toggle = 0;
+            }
+
             if (attitude == 0 || attitude == 2) {
                 this.maxIndex = 5;
                 index++;//pour ces attitudes, on incrémente simplement
@@ -97,7 +104,12 @@ abstract class AnimatedThing {
             if (index > this.maxIndex){
                 index = 0;//rebouclage une fois la dernière image atteinte
             }
-            Rectangle2D viewportRect = new Rectangle2D(index*offset, attitude*160, 120, 100);
+            Rectangle2D viewportRect;
+            if (toggle == 0){//valeur de base
+                viewportRect = new Rectangle2D(index*offset, attitude*160, 120, 100);
+            } else {
+                viewportRect = new Rectangle2D(3*offset, 3*160, 120, 100);
+            }
             sprite.setViewport(viewportRect);
         }
         //-------Animation du héros FIN-------

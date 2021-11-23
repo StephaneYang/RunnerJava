@@ -17,7 +17,7 @@ public class GameScene extends Scene {
     staticThing hearts3 = new staticThing("C:\\imgRunner\\hearts3.png", 10, 0, 50);
     Camera cam;
     Hero hero = new Hero(0.05*600, 0.8*300-50);
-    ArrayList<Foe> alFoe=new ArrayList<Foe>();//Liste d'ennemis
+    ArrayList<Foe> alFoe= new ArrayList<>();//Liste d'ennemis
 
     private int numberOfLives;
     public static int left, right, up, down, shoot;
@@ -29,13 +29,6 @@ public class GameScene extends Scene {
             camY = hero.y + camOriginY;
 
             hero.update();
-            for(int i=0;i<alFoe.size();i++)
-            {
-                alFoe.get(i).update();
-            }
-            Camera.update(time, hero);
-            update(time);
-            AnimatedThing.temps++;
 
             if (right == 1) {
                 hero.incrementation = 5;//hero run faster
@@ -52,6 +45,16 @@ public class GameScene extends Scene {
             }
             hero.x += hero.incrementation;//évolution de la position du héros
 
+            for (Foe foe : alFoe) {
+                foe.update();
+                foe.x = cam.getX();//déplacement de l'ennemi en fonction de celui de la caméra (déplacement similaire au paysage)
+            }
+            if (hero.invincibility > 0) hero.invincibility -= 100000000;//décrémentation du temps d'invincibilité
+            //System.out.println("invincibility = "+hero.invincibility+"   isinvincible"+hero.isInvincible());
+            Camera.update(time, hero);
+            update(time);
+            AnimatedThing.temps++;
+
             if (up == 1) {
                 hero.jump();//hero jump
             }
@@ -60,10 +63,21 @@ public class GameScene extends Scene {
 
             if (camX>=800+camOriginX) {
                 hero.x = 0; //repartir au début lorsqu'on atteint le bout de l'image
+                for (Foe foe : alFoe) {
+                    foe.x -= 800;//réajustement des ennemis
+                }
             }
 
-            if (hero.detectCollision(alFoe.get(0).getHitBox())==1) System.out.println("Collision !");
-            else System.out.println(".");
+            //détection de collision
+            for (Foe foe : alFoe) {
+                if (hero.isInvincible() == 0) {//if the hero is not invincible, check the hitbox
+                    if (hero.detectCollision(foe.getHitBox()) == 1) {
+                        System.out.println("Collision !");
+                        hero.invincibility = 25000000000.0;
+                        numberOfLives--;
+                    } else System.out.println(".");
+                }
+            }
         }
     };
 
@@ -71,7 +85,7 @@ public class GameScene extends Scene {
         super(pane, windowX, windowY, true);
         GameScene.camOriginX = camOriginX;
         GameScene.camOriginY = camOriginY;
-        numberOfLives = 1;
+        numberOfLives = 3;
 
         //camX et camY correspondent ensemble à la position du hero imaginaire* + les coordonnées (dans le paysage) du coin supérieur gauche de la caméra
         //*imaginaire car hero.x et hero.y ne correspondent pas à la position qu'on voit sur la fenêtre (il reste dans la fenêtre et ne quitte pas l'écran) mais on imagine un héros qui évolue dans x et y
@@ -84,10 +98,18 @@ public class GameScene extends Scene {
         this.pane.getChildren().add(desertR.getImg());
         this.pane.getChildren().add(hero.getImg());
 
-        alFoe.add(new Foe(150,190));//ajouter un ennemi
-        this.pane.getChildren().add(alFoe.get(0).getImg());
-        alFoe.get(0).sprite.setX(alFoe.get(0).BaseX);
-        alFoe.get(0).sprite.setY(alFoe.get(0).BaseY);
+        //ajout des ennemis_DEBUT
+        double nbFoesdl = Math.floor(Math.random()*(50-10+1)+10);//formula : Math.floor(Math.random()*(max-min+1)+min) found in https://www.educative.io/edpresso/how-to-generate-random-numbers-in-java
+        int nbFoes = (int)Math.round(nbFoesdl);
+        for(int i=0;i<nbFoes;i++) {
+            double spawndl = Math.floor(Math.random()*(900*(1+i)-600*(1+i)+1)+600*(1+i));
+            int spawn = (int)Math.round(spawndl);
+            alFoe.add(new Foe(spawn, 190));//ajouter un ennemi
+            this.pane.getChildren().add(alFoe.get(i).getImg());
+            alFoe.get(i).sprite.setX(alFoe.get(i).BaseX);
+            alFoe.get(i).sprite.setY(alFoe.get(i).BaseY);
+        }
+        //ajout des ennemis_FIN
 
         timer.start();
     }
@@ -127,18 +149,28 @@ public class GameScene extends Scene {
         //-------------affichage_paysage_FIN-------------
 
         //-------------position du heros sur l'écran_DEBUT-------------
-        hero.sprite.setX(hero.BaseX - (cam.getX()-camX)); //on soustrait la position du milieu par la transformation (transformation = différence entre le résultat de l'équation diff et l'entrée)
-                                                                  //si la caméra est en retard par rapport au héros, la tranformation est négative -> le sprite du héros part à droite sur la fenêtre
-                                                                  //lorsqu'il n'y aura plus de retard, le sprite revient au milieu (transformation = nulle)
-        hero.sprite.setY(hero.BaseY - (cam.getY()-camY));
+        //on soustrait la position du milieu par la transformation (transformation = différence entre le résultat de l'équation diff et l'entrée)
+        //si la caméra est en retard par rapport au héros, la tranformation est négative -> le sprite du héros part à droite sur la fenêtre
+        //lorsqu'il n'y aura plus de retard, le sprite revient au milieu (transformation = nulle)
+        hero.sprite.setX(hero.BaseX - (cam.getX() - camX));
+        hero.sprite.setY(hero.BaseY - (cam.getY() - camY));
         //-------------position du heros sur l'écran_FIN-------------
+
+        //-------------position des ennemis sur l'écran_DEBUT-------------
+        for (Foe foe : alFoe) {
+            foe.sprite.setX(foe.BaseX - foe.x);
+            foe.sprite.setY(290 - cam.getY());
+        }
+        //-------------position des ennemis sur l'écran_FIN-------------
 
         //-------------mise à jour de l'affichage des coeurs_DEBUT-------------
         pane.getChildren().remove(hearts0.getImg());
         pane.getChildren().remove(hearts1.getImg());
         pane.getChildren().remove(hearts2.getImg());
         pane.getChildren().remove(hearts3.getImg());
-        if (numberOfLives == 0) pane.getChildren().add(hearts0.getImg());
+        if (numberOfLives <= 0) {
+            pane.getChildren().add(hearts0.getImg());
+        }
         if (numberOfLives == 1) pane.getChildren().add(hearts1.getImg());
         if (numberOfLives == 2) pane.getChildren().add(hearts2.getImg());
         if (numberOfLives >= 3) pane.getChildren().add(hearts3.getImg());
@@ -146,7 +178,4 @@ public class GameScene extends Scene {
 
     }
 
-    public void SetLife(int life) {
-        this.numberOfLives = life;
-    }
 }
