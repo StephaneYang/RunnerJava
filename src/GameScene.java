@@ -9,12 +9,12 @@ public class GameScene extends Scene {
     protected static double windowX = 600, windowY = 300;//taille de la fenêtre x=[0-800] et y=[0-400], if faut garder une proportion 2:1
     static double camOriginX, camOriginY, camX, camY;
     Pane pane;
-    staticThing desertL = new staticThing("C:\\imgRunner\\BG12.png", 0, 0, 0);
-    staticThing desertR = new staticThing("C:\\imgRunner\\BG12.png", 800, 0, 0);
-    staticThing hearts0 = new staticThing("C:\\imgRunner\\hearts0.png", 10, 0, 50);
-    staticThing hearts1 = new staticThing("C:\\imgRunner\\hearts1.png", 10, 0, 50);
-    staticThing hearts2 = new staticThing("C:\\imgRunner\\hearts2.png", 10, 0, 50);
-    staticThing hearts3 = new staticThing("C:\\imgRunner\\hearts3.png", 10, 0, 50);
+    staticThing desertL = new staticThing("imgRunner/BG12.png", 0, 0, 0);
+    staticThing desertR = new staticThing("imgRunner/BG12.png", 800, 0, 0);
+    staticThing hearts0 = new staticThing("imgRunner/hearts0.png", 10, 0, 50);
+    staticThing hearts1 = new staticThing("imgRunner/hearts1.png", 10, 0, 50);
+    staticThing hearts2 = new staticThing("imgRunner/hearts2.png", 10, 0, 50);
+    staticThing hearts3 = new staticThing("imgRunner/hearts3.png", 10, 0, 50);
     Camera cam;
     Hero hero = new Hero(0.05*600, 0.8*300-50);
     ArrayList<Foe> alFoe= new ArrayList<>();//Liste d'ennemis
