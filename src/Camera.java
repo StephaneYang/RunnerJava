@@ -17,12 +17,14 @@ public class Camera {
 
     public static void update(long time, Hero hero) {
         double xHero = GameScene.camX;
-        double yHero = GameScene.camY + viewOffset;
+        double yHero = GameScene.camY + viewOffset; //voir plus bas (ou CTRL+F) pour l'explication de la présence de viewOffset
         if ((xHero -x)<-100) x -= 800;//réajustement de la position lorsque le héros revient au debut de la map (écart important)
-                                     //xHero est réduit de 800, donc il faut que x soit réduit de 800 aussi afin de
+                                     //xHero est réduit de 800, donc il FAUT que x soit réduit de 800 EGALEMENT afin de
                                      //garder l'écart réelle et éviter de fausser les calculs
+
         ax = sqrtwo*sqrtwo*(xHero -x) - 2*1*sqrtwo*vx; //équation ressort-masse , amortissement = 1 (pas de dépassemnt)
         ay = sqrtwo*sqrtwo*(yHero -y) - 2*0.7*sqrtwo*vy; //amortissement = 0.7 (meilleur temps de réponse)
+
         if (hero.isJumping == 1) {//monte moins vite que descendre
             ay = sqrtwo1*sqrtwo1*(yHero -y) - 2*1*sqrtwo1*vy;
             viewOffset = 0;
@@ -37,7 +39,7 @@ public class Camera {
         vy += dvy;
 
         double dx = vx * dt;
-        x += dx;//position calculée (décalée ou pas par rapport au héros)
+        x += dx;//position calculée (c'est le décalage (ou pas) par rapport au héros)
         double dy = vy * dt;
         y += dy;
 

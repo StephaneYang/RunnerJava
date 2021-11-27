@@ -2,11 +2,10 @@ import javafx.animation.AnimationTimer;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
-
 import java.util.*;
 
 public class GameScene extends Scene {
-    protected static double windowX = 600, windowY = 300;//taille de la fenêtre x=[0-800] et y=[0-400], if faut garder une proportion 2:1
+    protected static double windowX = 800, windowY = 400;//taille de la fenêtre x=[0;800] et y=[0;400], if faut garder une proportion 2:1
     static double camOriginX, camOriginY, camX, camY;
     Pane pane;
     staticThing desertL = new staticThing("imgRunner/BG12.png", 0, 0, 0);
@@ -47,9 +46,14 @@ public class GameScene extends Scene {
 
             for (Foe foe : alFoe) {
                 foe.update();
-                foe.x -= hero.incrementation;//déplacement de l'ennemi en fonction de celui de la caméra (déplacement similaire au paysage)
+                foe.x -= hero.incrementation;//"déplacement" de l'ennemi en fonction de celui de la caméra (déplacement similaire au paysage)
+
+                /*Random generator = new Random();
+                int randomIndex = generator.nextInt( 2 );//0 ou 1
+                if((foe.BaseX + foe.x > 245)&&(foe.BaseX + foe.x < 250)&&(randomIndex == 1)) foe.incrementation = 3;
+                foe.x -= foe.incrementation;//déplacement de l'ennemi vers le joueur selon son envie (qui est aléatoire)*/
             }
-            if (hero.invincibility > 0) hero.invincibility -= 100000000;//décrémentation du temps d'invincibilité
+            if (hero.invincibility > 0) hero.invincibility -= 300000000;//décrémentation du temps d'invincibilité
             //System.out.println("invincibility = "+hero.invincibility+"   isinvincible"+hero.isInvincible());
             Camera.update(time, hero);
             update(time);
@@ -90,7 +94,11 @@ public class GameScene extends Scene {
         for(int i=0;i<nbFoes;i++) {
             double spawndl = Math.floor(Math.random()*(900*(1+i)-600*(1+i)+1)+600*(1+i));
             int spawn = (int)Math.round(spawndl);
-            alFoe.add(new Foe(spawn, 190));//ajouter un ennemi
+
+            double foeNumerodl = Math.floor(Math.random()*(3+1));//génération d'un type d'ennemi au hasard
+            int foeNumero = (int)Math.round(foeNumerodl);
+
+            alFoe.add(new Foe(spawn, 290, foeNumero));//ajouter un ennemi
             this.pane.getChildren().add(alFoe.get(i).getImg());
             alFoe.get(i).sprite.setX(alFoe.get(i).BaseX);
             alFoe.get(i).sprite.setY(alFoe.get(i).BaseY);
@@ -144,8 +152,9 @@ public class GameScene extends Scene {
 
         //-------------position des ennemis sur l'écran_DEBUT-------------
         for (Foe foe : alFoe) {
-            foe.sprite.setX(foe.BaseX + foe.x);
-            foe.sprite.setY(290 - cam.getY());
+            foe.sprite.setX(foe.BaseX + foe.x - (cam.getX() - camX));
+            foe.sprite.setY(foe.BaseY - cam.getY());
+            //if (foe.BaseX + foe.x < 200) alFoe.remove(foe);
         }
         //-------------position des ennemis sur l'écran_FIN-------------
 
