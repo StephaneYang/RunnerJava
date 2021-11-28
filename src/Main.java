@@ -43,7 +43,7 @@ public class Main extends Application {
                     GameScene.right = 1;
                     break;
                 case SPACE:
-                    GameScene.shoot = 1;
+                    GameScene.space = 1;
                     break;
             }
         });
@@ -63,7 +63,7 @@ public class Main extends Application {
                     GameScene.right = 0;
                     break;
                 case SPACE:
-                    GameScene.shoot = 0;
+                    GameScene.space = 0;
                     break;
             }
         });

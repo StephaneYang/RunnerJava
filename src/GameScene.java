@@ -1,6 +1,8 @@
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import java.util.*;
 
@@ -14,65 +16,115 @@ public class GameScene extends Scene {
     staticThing hearts1 = new staticThing("imgRunner/hearts1.png", 10, 0, 50);
     staticThing hearts2 = new staticThing("imgRunner/hearts2.png", 10, 0, 50);
     staticThing hearts3 = new staticThing("imgRunner/hearts3.png", 10, 0, 50);
+    staticThing gameOverBG = new staticThing("imgRunner/gameOver.png", 10, 0, 0);
     Camera cam;
     Hero hero = new Hero(0.05*600, 0.8*300-50);
     ArrayList<Foe> alFoe= new ArrayList<>();//Liste d'ennemis
 
-    private int numberOfLives;
-    public static int left, right, up, down, shoot;
+    String state;
+    private int numberOfLives, gameOver;
+    public static int left, right, up, down, space;
     AnimationTimer timer = new AnimationTimer() {
         public void handle(long time) {
 
-            //Mise à jour des valeurs de camX et camY
-            camX = hero.x + camOriginX;
-            camY = hero.y + camOriginY;
+            //Machine à état du jeu
+            switch (state) {
+                case "MAINMENU":
+                    state = "GAME";
+                    break;
+                case "GAME":
+                    if (numberOfLives <= 0) {
+                        state = "GAMEOVER";
+                        pane.getChildren().add(gameOverBG.getImg());
+                    }
+                    break;
+                case "GAMEOVER":
+                    if (GameScene.space == 1) {
+                        numberOfLives = 3;
+                        pane.getChildren().remove(gameOverBG.getImg());
+                        //suppression des ennemis_DEBUT
+                        for (Foe foe : alFoe) {
+                            pane.getChildren().remove(foe.getImg());
+                        }
+                        alFoe.removeAll(alFoe);
+                        //suppression des ennemis_DEBUT
 
-            hero.update();
+                        //réajout des ennemis_DEBUT
+                        double nbFoesdl = Math.floor(Math.random()*(50-10+1)+10);//formula : Math.floor(Math.random()*(max-min+1)+min) found in https://www.educative.io/edpresso/how-to-generate-random-numbers-in-java
+                        int nbFoes = (int)Math.round(nbFoesdl);
+                        for(int i=0;i<nbFoes;i++) {
+                            double spawndl = Math.floor(Math.random()*(900*(1+i)-600*(1+i)+1)+600*(1+i));
+                            int spawn = (int)Math.round(spawndl);
 
-            if (right == 1) {
-                hero.incrementation = 5;//hero run faster
-                hero.timeFrames = 5;//so the period of the animation should be lower
-            } else if (left == 1) {
-                hero.incrementation = 1;//hero run slower
-                hero.timeFrames = 30;//so the period of the animation should be higher
-            } else if (down == 1) {
-                hero.incrementation = 0;//hero is stopped
-                hero.timeFrames = Integer.MAX_VALUE;//so the period should be infinite
-            } else {
-                hero.incrementation = 3;//hero run at normal speed
-                hero.timeFrames = 7;//so the period stay at the initialization level (=7)
+                            double foeNumerodl = Math.floor(Math.random()*(3+1));//génération d'un type d'ennemi au hasard
+                            int foeNumero = (int)Math.round(foeNumerodl);
+
+                            alFoe.add(new Foe(spawn, 290, foeNumero));//ajouter un ennemi
+                            pane.getChildren().add(alFoe.get(i).getImg());
+                            alFoe.get(i).sprite.setX(alFoe.get(i).BaseX);
+                            alFoe.get(i).sprite.setY(alFoe.get(i).BaseY);
+                        }
+                        //réajout des ennemis_FIN
+
+                        state = "GAME";
+                    }
+                    break;
             }
-            hero.x += hero.incrementation;//évolution de la position du héros
 
-            for (Foe foe : alFoe) {
-                foe.update();
-                foe.x -= hero.incrementation;//"déplacement" de l'ennemi en fonction de celui de la caméra (déplacement similaire au paysage)
+            if (state == "GAME") {
+                //Mise à jour des valeurs de camX et camY
+                camX = hero.x + camOriginX;
+                camY = hero.y + camOriginY;
+
+                hero.update();
+
+                if (right == 1) {
+                    hero.incrementation = 5;//hero run faster
+                    hero.timeFrames = 5;//so the period of the animation should be lower
+                } else if (left == 1) {
+                    hero.incrementation = 1;//hero run slower
+                    hero.timeFrames = 30;//so the period of the animation should be higher
+                } else if (down == 1) {
+                    hero.incrementation = 0;//hero is stopped
+                    hero.timeFrames = Integer.MAX_VALUE;//so the period should be infinite
+                } else {
+                    hero.incrementation = 3;//hero run at normal speed
+                    hero.timeFrames = 7;//so the period stay at the initialization level (=7)
+                }
+                hero.x += hero.incrementation;//évolution de la position du héros
+
+                for (Foe foe : alFoe) {
+                    foe.update();
+                    foe.x -= hero.incrementation;//"déplacement" de l'ennemi en fonction de celui de la caméra (déplacement similaire au paysage)
 
                 /*Random generator = new Random();
                 int randomIndex = generator.nextInt( 2 );//0 ou 1
                 if((foe.BaseX + foe.x > 245)&&(foe.BaseX + foe.x < 250)&&(randomIndex == 1)) foe.incrementation = 3;
                 foe.x -= foe.incrementation;//déplacement de l'ennemi vers le joueur selon son envie (qui est aléatoire)*/
-            }
-            if (hero.invincibility > 0) hero.invincibility -= 300000000;//décrémentation du temps d'invincibilité
-            //System.out.println("invincibility = "+hero.invincibility+"   isinvincible"+hero.isInvincible());
-            Camera.update(time, hero);
-            update(time);
-            AnimatedThing.temps++;
+                }
+                if (hero.invincibility > 0) hero.invincibility -= 300000000;//décrémentation du temps d'invincibilité
+                //System.out.println("invincibility = "+hero.invincibility+"   isinvincible"+hero.isInvincible());
+                Camera.update(time, hero);
+                update(time);
+                AnimatedThing.temps++;
 
-            if (up == 1) {
-                hero.jump();//hero jump
-            }
+                if (up == 1) {
+                    hero.jump();//hero jump
+                }
 
-            if (hero.y == 0) hero.jumpLvl = 0;//remise à 0 de la limite de saut
+                if (hero.y == 0) hero.jumpLvl = 0;//remise à 0 de la limite de saut
 
-            if (camX>=800+camOriginX) {
-                hero.x = 0; //repartir au début lorsqu'on atteint le bout de l'image
+                if (camX >= 800 + camOriginX) {
+                    hero.x = 0; //repartir au début lorsqu'on atteint le bout de l'image
+                }
             }
         }
     };
 
     public GameScene(Pane pane, double camOriginX, double camOriginY) {
         super(pane, windowX, windowY, true);
+        state  = "MAINMENU";
+
         GameScene.camOriginX = camOriginX;
         GameScene.camOriginY = camOriginY;
         numberOfLives = 3;
@@ -175,9 +227,7 @@ public class GameScene extends Scene {
         pane.getChildren().remove(hearts1.getImg());
         pane.getChildren().remove(hearts2.getImg());
         pane.getChildren().remove(hearts3.getImg());
-        if (numberOfLives <= 0) {
-            pane.getChildren().add(hearts0.getImg());
-        }
+        if (numberOfLives <= 0) pane.getChildren().add(hearts0.getImg());
         if (numberOfLives == 1) pane.getChildren().add(hearts1.getImg());
         if (numberOfLives == 2) pane.getChildren().add(hearts2.getImg());
         if (numberOfLives >= 3) pane.getChildren().add(hearts3.getImg());

@@ -42,7 +42,7 @@ abstract class AnimatedThing {
         //Rq : "attitude" correspond également aux états du héros l'utilisation est différente
         //attitude permet de choisir la ligne d'animation tandis que les autres états permettent de choisir l'index (colonne)
         if ((x-oldx)>0) {
-            if (GameScene.shoot == 1) attitude = 2;
+            if (GameScene.space == 1) attitude = 2;
             else attitude = 0;
         }
 
@@ -50,13 +50,13 @@ abstract class AnimatedThing {
             isJumping = 1;
             isFalling = 0;
             index = 0;
-            if (GameScene.shoot == 1) attitude = 3;
+            if (GameScene.space == 1) attitude = 3;
             else attitude = 1;
         } else if  (((y-oldy)>=0) && (y!=0)) { //hero is falling ("no variation but still flying" is also considered as falling)
             isFalling = 1;
             isJumping = 0;
             index = 1;
-            if (GameScene.shoot == 1) attitude = 3;
+            if (GameScene.space == 1) attitude = 3;
             else attitude = 1;
         } else if (((y-oldy)==0) && (y==0)) {
             isJumping = 0;
